@@ -7,12 +7,32 @@ import java.util.List;
 
 @Repository
 public class ProductRepository {
+
     private List<Product> productData = new ArrayList<>();
+
     public Product create(Product product) {
         productData.add(product);
         return product;
     }
+
     public Iterator<Product> findAll() {
         return productData.iterator();
+    }
+
+    public Product findById(String id) {
+        for (Product product : productData) {
+            if (product.getProductId().equals(id)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    public void update(Product updatedProduct) {
+        Product product = findById(updatedProduct.getProductId());
+        if (product != null) {
+            product.setProductName(updatedProduct.getProductName());
+            product.setProductQuantity(updatedProduct.getProductQuantity());
+        }
     }
 }
