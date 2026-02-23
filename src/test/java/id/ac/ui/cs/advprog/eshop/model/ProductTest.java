@@ -30,4 +30,26 @@ class ProductTest {
     void testGetProductQuantity() {
         assertEquals(100, this.product.getProductQuantity());
     }
+
+    @Test
+    void testEmptyConstructor() {
+        Product product = new Product();
+
+        product.setProductId("1");
+        product.setProductName("Laptop");
+        product.setProductQuantity(10);
+
+        assertEquals("1", product.getProductId());
+        assertEquals("Laptop", product.getProductName());
+        assertEquals(10, product.getProductQuantity());
+    }
+
+    @Test
+    void testParameterizedConstructor() {
+        Product product = new Product("2", "Mouse", 5);
+
+        assertEquals("2", product.getProductId());
+        assertEquals("Mouse", product.getProductName());
+        assertEquals(5, product.getProductQuantity());
+    }
 }
