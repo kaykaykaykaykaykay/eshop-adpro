@@ -105,4 +105,40 @@ class ProductRepositoryTest {
         // Assert
         assertNull(productRepository.findById("1"));
     }
+
+    @Test
+    void findById_notFound_returnsNull() {
+        ProductRepository repo = new ProductRepository();
+
+        Product result = repo.findById("unknown-id");
+
+        assertNull(result);
+    }
+
+    @Test
+    void update_productNotFound_doesNothing() {
+        ProductRepository repo = new ProductRepository();
+
+        Product product = new Product();
+        product.setProductId("x");
+        product.setProductName("Test");
+        product.setProductQuantity(10);
+
+        repo.update(product);
+
+        assertNull(repo.findById("x"));
+    }
+
+    @Test
+    void deleteById_removesProduct() {
+        ProductRepository repo = new ProductRepository();
+
+        Product product = new Product();
+        product.setProductId("1");
+
+        repo.create(product);
+        repo.deleteById("1");
+
+        assertNull(repo.findById("1"));
+    }
 }
