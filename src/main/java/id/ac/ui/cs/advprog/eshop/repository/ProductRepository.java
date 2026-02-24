@@ -1,14 +1,17 @@
 package id.ac.ui.cs.advprog.eshop.repository;
+
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class ProductRepository {
 
-    private List<Product> productData = new ArrayList<>();
+    private final List<Product> productData = new ArrayList<>();
 
     public Product create(Product product) {
         productData.add(product);
@@ -21,7 +24,7 @@ public class ProductRepository {
 
     public Product findById(String id) {
         for (Product product : productData) {
-            if (product.getProductId().equals(id)) {
+            if (Objects.equals(product.getProductId(), id)) {
                 return product;
             }
         }
@@ -37,6 +40,7 @@ public class ProductRepository {
     }
 
     public void deleteById(String id) {
-        productData.removeIf(product -> product.getProductId().equals(id));
+        productData.removeIf(product ->
+                Objects.equals(product.getProductId(), id));
     }
 }
