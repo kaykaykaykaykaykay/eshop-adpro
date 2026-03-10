@@ -60,3 +60,30 @@ Thorough: The tests cover both happy paths and unhappy paths, such as creating
 an order with empty products, updating with an invalid status, and finding an order
 with a non-existent ID. One area I could improve is adding more boundary cases,
 for example testing with null values in addition to empty strings.
+
+Bonus 2 Reflection
+1. What do you think about your partner's code?
+Overall my partner's code is well-structured and follows the TDD workflow with clear 
+RED-GREEN-REFACTOR commits. The Order and Payment features are functionally correct and 
+tests cover both happy and unhappy paths. However, there are some areas that could be 
+improved, particularly around keeping constructors clean, encapsulation of internal data, 
+and avoiding redundant code in enums.
+
+2. What did you do to contribute to your partner's code?
+I reviewed the Order and Payment code and left comments on the pull request identifying 
+code smells. I then created a refactor branch and fixed the Long Method smell in 
+Payment.java by extracting the voucher and COD validation logic out of the constructor 
+into dedicated private methods (isValidVoucher, isValidCOD, and evaluateStatus), making 
+the constructor only responsible for assigning fields.
+
+3. What code smells did you find?
+Long Method in Payment.java: the constructor was doing three things at once — 
+assigning fields, validating voucher codes, and validating COD data, all in one 30-line block.
+
+4. What refactoring steps did you suggest and execute?
+I suggested and executed the Extract Method refactoring step on Payment.java. The 
+constructor now delegates status evaluation to a private `evaluateStatus()` method, which 
+in turn calls `isValidVoucher()` or `isValidCOD()` depending on the payment method. Each 
+method now has a single clear responsibility. For the other smells I left suggestions in 
+the pull request comments but did not implement them to avoid making too many changes to 
+my partner's code at once.
