@@ -34,7 +34,8 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Invalid order status: " + status);
         }
         order.setStatus(status);
-        return orderRepository.save(order);
+        orderRepository.save(order);
+        return order;
     }
 
     @Override
