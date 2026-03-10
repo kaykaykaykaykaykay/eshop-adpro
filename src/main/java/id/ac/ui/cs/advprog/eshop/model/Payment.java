@@ -1,7 +1,9 @@
 package id.ac.ui.cs.advprog.eshop.model;
+
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import lombok.Getter;
 import java.util.Map;
-import java.util.List;
+
 @Getter
 public class Payment {
     private String id;
@@ -15,11 +17,11 @@ public class Payment {
         this.order = order;
         this.method = method;
         this.paymentData = paymentData;
-        this.status = "WAITING_PAYMENT";
+        this.status = PaymentStatus.WAITING_PAYMENT.name();
     }
 
     public void setStatus(String status) {
-        if (List.of("WAITING_PAYMENT", "SUCCESS", "REJECTED").contains(status)) {
+        if (PaymentStatus.contains(status)) {
             this.status = status;
         }
     }
