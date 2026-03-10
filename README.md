@@ -33,3 +33,58 @@ Dependency Inversion Principle (DIP): In CarController, I changed the injected d
 
 2. Applying SOLID makes the codebase more modular, testable, and easier to maintain. For example, by applying DIP and injecting the CarService interface instead of the concrete class, I can now easily swap out the implementation (e.g., creating a MockCarService for unit testing) without touching the CarController code.
 3. Failing to apply SOLID principles leads to tightly coupled and fragile code. For example, when CarController extended ProductController (violating SRP and LSP), any changes made to ProductController's base routing or methods could accidentally break or expose unwanted endpoints in CarController. It created an entangled architecture that is difficult to safely modify or scale.
+
+Reflection Module 4
+1. In terms of correctness, writing tests before implementation forced me to think about
+the expected behavior of each method before touching any production code. For example,
+writing tests for Order first made me realize I needed to handle edge cases like empty
+product lists and invalid status strings, which I might have missed if I had just started
+implementing directly. In terms of maintainability, having tests in place made me feel more confident when
+refactoring. When I replaced the hardcoded status strings with the OrderStatus enum,
+I could immediately verify that nothing broke by re-running the tests. Without tests,
+that refactoring step would have felt risky. In terms of productive workflow, the RED-GREEN-REFACTOR cycle gave me a clear
+structure to follow. Instead of getting lost in implementation details, I always had a
+clear goal: make the failing test pass. One thing I want to improve next time is writing
+more granular tests so that when a test fails, it is immediately obvious which specific
+behavior is broken.
+2. Fast: The unit tests in this tutorial are fast because they do not rely on any external
+dependencies. In OrderServiceImplTest, we mocked OrderRepository using Mockito,
+which means no actual database or file I/O is involved.
+Independent: Each test method is independent. The @BeforeEach setUp method
+resets the state before every test, so no test depends on the result of another.
+Repeatable: Because we use mocks and set up fresh data in setUp, the tests
+produce the same result every time regardless of the environment they run in.
+Self-Validating: Every test uses assertions (assertEquals, assertThrows, etc.)
+to automatically determine pass or fail. No manual inspection is needed.
+Thorough: The tests cover both happy paths and unhappy paths, such as creating
+an order with empty products, updating with an invalid status, and finding an order
+with a non-existent ID. One area I could improve is adding more boundary cases,
+for example testing with null values in addition to empty strings.
+
+Bonus 2 Reflection
+Branch I worked on https://github.com/kingfrog711/advprog_individual/tree/order
+1. What do you think about your partner's code?
+Overall my partner's code is well-structured and follows the TDD workflow with clear 
+RED-GREEN-REFACTOR commits. The Order and Payment features are functionally correct and 
+tests cover both happy and unhappy paths. However, there are some areas that could be 
+improved, particularly around keeping constructors clean, encapsulation of internal data, 
+and avoiding redundant code in enums.
+
+2. What did you do to contribute to your partner's code?
+I reviewed the Order and Payment code and left comments on the pull request identifying 
+code smells. I then created a refactor branch and fixed the Long Method smell in 
+Payment.java by extracting the voucher and COD validation logic out of the constructor 
+into dedicated private methods (isValidVoucher, isValidCOD, and evaluateStatus), making 
+the constructor only responsible for assigning fields.
+
+3. What code smells did you find?
+Long Method in Payment.java: the constructor was doing three things at once — 
+assigning fields, validating voucher codes, and validating COD data, all in one 30-line block.
+
+4. What refactoring steps did you suggest and execute?
+I suggested and executed the Extract Method refactoring step on Payment.java. The 
+constructor now delegates status evaluation to a private `evaluateStatus()` method, which 
+in turn calls `isValidVoucher()` or `isValidCOD()` depending on the payment method. Each 
+method now has a single clear responsibility. For the other smells I left suggestions in 
+the pull request comments but did not implement them to avoid making too many changes to 
+my partner's code at once.
